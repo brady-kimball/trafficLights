@@ -92,15 +92,20 @@
       const lightTwo = document.querySelectorAll('.light-two.light');
 
       function updateLights() {
-        intersection.step.bind(intersection);
+        intersection.step.bind(intersection)();
+
         lightOne.forEach( light => {
           if (light.dataset.color === intersection.lightOne.color) {
             light.style.setProperty('background-color', light.dataset.color);
+          } else {
+            light.style.setProperty('background-color', 'black');
           }
         });
         lightTwo.forEach( light => {
           if (light.dataset.color === intersection.lightTwo.color) {
             light.style.setProperty('background-color', light.dataset.color);
+          } else {
+            light.style.setProperty('background-color', 'black');
           }
         });
       }
