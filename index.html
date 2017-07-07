@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <section class='lights'>
+      <section class="light-one">
+        Light One
+        <section data-color="red" class="light-one light">
+        </section>
+        <section data-color="yellow" class="light-one light">
+        </section>
+        <section data-color="green" class="light-one light">
+        </section>
+      </section>
+      <section class="light-two">
+        Light Two
+        <section data-color="red" class="light-two light">
+        </section>
+        <section data-color="yellow" class="light-two light">
+        </section>
+        <section data-color="green" class="light-two light">
+        </section>
+      </section>
+    </section>
+
+    <style>
+      .lights {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .light {
+        margin: 10px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: black;
+      }
+    </style>
+
+    <script type="text/javascript">
+      class TrafficLight {
+        constructor(startIndex, green, yellow, total) {
+          this.id = startIndex;
+          this.greenTime = green; // Time light stays green
+          this.yellowTime = yellow; // Time light stays yellow
+          this.totalTime = total; // Total time
+          this.updateColor();
+        }
+
+        increment() {
+          this.id += 1;
+        }
+
+        updateColor() {
+          const id = this.id % this.totalTime;
+          if (id < this.greenTime) {
+            this.color = 'green';
+          } else if (id < this.greenTime + this.yellowTime) {
+            this.color = 'yellow';
+          } else {
+            this.color = 'red';
+          }
+        }
+
+        step() {
+          this.increment();
+          this.updateColor();
+        }
+      }
+
+
+      class Intersection {
+        constructor(green, yellow, red) {
+          this.total = 2 * (green + yellow + red);
+          this.lightOne = new TrafficLight(0, green, yellow, this.total);
+          this.lightTwo = new TrafficLight(this.total / 2, green, yellow, this.total);
+        }
+
+        step() {
+          this.lightOne.step();
+          this.lightTwo.step();
+        }
+      }
+
+      const intersection = new Intersection(8, 3, 2);
+      const lightOne = document.querySelectorAll('.light-one.light');
+      const lightTwo = document.querySelectorAll('.light-two.light');
+
+      function updateLights() {
+        intersection.step.bind(intersection);
+        lightOne.forEach( light => {
+          if (light.dataset.color === intersection.lightOne.color) {
+            light.style.setProperty('background-color', light.dataset.color);
+          }
+        });
+        lightTwo.forEach( light => {
+          if (light.dataset.color === intersection.lightTwo.color) {
+            light.style.setProperty('background-color', light.dataset.color);
+          }
+        });
+      }
+
+      setInterval(updateLights, 1000);
+    </script>
+  </body>
+</html>
